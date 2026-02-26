@@ -351,17 +351,47 @@
             text-decoration: none;
         }
 
+        /* ========== 访客统计 - 样式1：简约卡片 ========== */
         .visitor-stats {
-            margin-top: 10px;
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.6);
+            margin-top: 15px;
             display: flex;
-            align-items: center;
             justify-content: center;
-            gap: 5px;
         }
 
-        .visitor-stats img {
+        .visitor-card {
+            background: white;
+            color: #667eea;
+            padding: 6px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        .visitor-card i {
+            color: #667eea;
+            font-size: 1rem;
+        }
+
+        .visitor-text {
+            color: #555;
+        }
+
+        .visitor-number {
+            background: #f5f5f5;
+            color: #333;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .visitor-number img {
             display: inline-block;
             vertical-align: middle;
         }
@@ -376,6 +406,11 @@
             }
             .card-grid {
                 grid-template-columns: 1fr;
+            }
+            .visitor-card {
+                padding: 4px 16px;
+                font-size: 0.8rem;
+                gap: 6px;
             }
         }
     </style>
@@ -405,9 +440,16 @@
 
         <div class="footer">
             <p>🏆 数据综合自公开资料 · <a href="#" id="resetFilters">显示全部</a> · 共80+家AI企业</p>
+            
+            <!-- 访客统计 - 样式1：简约卡片，文字已改为"访客" -->
             <div class="visitor-stats">
-                <span>👥 网站访问量：</span>
-                <img src="https://visitor-badge.laobi.icu/badge?page_id=aigroup.china" alt="访客统计">
+                <div class="visitor-card">
+                    <i class="fas fa-eye"></i>
+                    <span class="visitor-text">访客</span>
+                    <span class="visitor-number">
+                        <img src="https://visitor-badge.laobi.icu/badge?page_id=aigroup.china" alt="访客统计">
+                    </span>
+                </div>
             </div>
         </div>
     </div>
@@ -432,9 +474,9 @@
 
         // ==================== 数据 ====================
         const aiCompanies = [
-            // 对话产品类 - 只更新DeepSeek、通义千问、文心一言，其他保留原样
+            // 对话产品类 - 已更新通义千问URL和DeepSeek logo
             { id: 101, name: 'DeepSeek', logo: 'https://cdn.deepseek.com/logo.png', url: 'https://chat.deepseek.com', desc: '深度求索出品，免费AI对话助手，支持超长上下文和联网搜索。', tags: ['chat', 'featured'], category: 'chat', founded: '2023', city: '杭州' },
-            { id: 102, name: '通义千问', logo: 'https://img.alicdn.com/imgextra/i3/O1CN01H3RqFg1eN0b1x1D1N_!!6000000003862-2-tps-200-200.png', url: 'https://tongyi.aliyun.com', desc: '阿里云推出的AI大模型，支持多轮对话和文档处理。', tags: ['chat', 'featured'], category: 'chat', founded: '2023', city: '杭州' },
+            { id: 102, name: '通义千问', logo: 'https://img.alicdn.com/imgextra/i3/O1CN01H3RqFg1eN0b1x1D1N_!!6000000003862-2-tps-200-200.png', url: 'https://www.qianwen.com/?source=tongyigw', desc: '阿里云推出的AI大模型，支持多轮对话和文档处理。', tags: ['chat', 'featured'], category: 'chat', founded: '2023', city: '杭州' },
             { id: 103, name: '元宝', logo: 'https://yuanbao.tencent.com/favicon.ico', url: 'https://yuanbao.tencent.com', desc: '腾讯元宝AI助手，集成腾讯生态。', tags: ['chat'], category: 'chat', founded: '2023', city: '深圳' },
             { id: 104, name: '文心一言', logo: 'https://nlp-eb.cdn.bcebos.com/logo/favicon.ico', url: 'https://yiyan.baidu.com', desc: '百度知识增强大语言模型，月活用户突破2亿。', tags: ['chat', 'featured'], category: 'chat', founded: '2023', city: '北京' },
             { id: 105, name: '智谱清言', logo: 'https://chatglm.cn/favicon.ico', url: 'https://chatglm.cn', desc: '智谱AI基于GLM模型的对话助手。', tags: ['chat'], category: 'chat', founded: '2022', city: '北京' },
@@ -687,7 +729,6 @@
             let iconHtml;
             
             if (company.logo) {
-                // 有logo的公司：尝试加载logo，失败时显示彩色首字母
                 iconHtml = `<img class="card-icon" 
                     src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 50 50'%3E%3Crect width='50' height='50' fill='%23${bgColor.slice(1)}'/%3E%3Ctext x='25' y='32' font-size='24' text-anchor='middle' fill='%23ffffff' font-family='Arial'%3E${company.name.charAt(0)}%3C/text%3E%3C/svg%3E"
                     data-src="${company.logo}"
@@ -695,7 +736,6 @@
                     loading="lazy"
                     onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'50\' height=\'50\' viewBox=\'0 0 50 50\'%3E%3Crect width=\'50\' height=\'50\' fill=\'%23${bgColor.slice(1)}\'/%3E%3Ctext x=\'25\' y=\'32\' font-size=\'24\' text-anchor=\'middle\' fill=\'%23ffffff\' font-family=\'Arial\'%3E${company.name.charAt(0)}%3C/text%3E%3C/svg%3E';">`;
             } else {
-                // 没有logo的公司：直接显示彩色首字母
                 iconHtml = `<div class="card-icon-placeholder" style="background-color: ${bgColor};">${company.name.charAt(0)}</div>`;
             }
             
@@ -733,7 +773,6 @@
                 </div>
             `;
 
-            // 懒加载图片
             const img = card.querySelector('img');
             if (img && img.dataset.src) {
                 const observer = new IntersectionObserver((entries) => {
