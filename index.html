@@ -4,16 +4,27 @@
     <meta name="baidu-site-verification" content="codeva-1PasvZdzSe" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AI Group.中国 - 中国人工智能企业大全">
+    <meta name="description" content="AI Group.中国 - 中国人工智能企业大全，收录80+家AI领军企业">
     <title>AI Group.中国 · 人工智能企业大全</title>
     
     <!-- 预连接加速 -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     
-    <!-- 字体图标库 - 使用精简版 -->
+    <!-- 字体图标库 -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0-beta3/css/all.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- 百度自动推送 -->
+    <script>
+        (function(){
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            bp.src = curProtocol === 'https' ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+    </script>
     
     <style>
         * {
@@ -24,7 +35,7 @@
         }
 
         body {
-            background: #667eea;  /* 纯色代替渐变，减少渲染压力 */
+            background: #667eea;
             min-height: 100vh;
             padding: 30px 15px;
         }
@@ -123,7 +134,6 @@
             border-color: white;
         }
 
-        /* 分类标题 - 固定在顶部 */
         .category-sticky {
             position: sticky;
             top: 0;
@@ -144,7 +154,6 @@
             font-size: 1.8rem;
         }
 
-        /* 卡片网格 - 优化布局 */
         .card-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -152,7 +161,6 @@
             margin-bottom: 30px;
         }
 
-        /* 卡片 - 简化样式，移除毛玻璃 */
         .card {
             background: white;
             border-radius: 16px;
@@ -193,14 +201,15 @@
             width: 50px;
             height: 50px;
             border-radius: 12px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
             font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             flex-shrink: 0;
+            background: #667eea;
         }
 
         .card-title {
@@ -342,7 +351,21 @@
             text-decoration: none;
         }
 
-        /* 移动端优化 */
+        .visitor-stats {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .visitor-stats img {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.8rem;
@@ -355,25 +378,13 @@
                 grid-template-columns: 1fr;
             }
         }
-
-        /* 加载骨架屏 */
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>
-                <i class="fas fa-robot"></i> AI Group.中国
+                <i class="fas fa-brain"></i> AI Group.中国
             </h1>
             <p>中国人工智能企业大全 · 80+家领军企业 · 持续更新</p>
         </div>
@@ -386,7 +397,6 @@
             <div class="filter-buttons" id="filterButtons"></div>
         </div>
 
-        <!-- 分类容器 -->
         <div id="categoriesContainer"></div>
 
         <div class="back-to-top" id="backToTop">
@@ -395,24 +405,38 @@
 
         <div class="footer">
             <p>🏆 数据综合自公开资料 · <a href="#" id="resetFilters">显示全部</a> · 共80+家AI企业</p>
+            <div class="visitor-stats">
+                <span>👥 网站访问量：</span>
+                <img src="https://visitor-badge.laobi.icu/badge?page_id=aigroup.china" alt="访客统计">
+            </div>
         </div>
     </div>
 
     <script>
-        // ==================== 性能优化配置 ====================
-        const CONFIG = {
-            pageSize: 20,           // 每页显示数量
-            lazyLoadOffset: 200,     // 懒加载触发距离
-            scrollThrottle: 16       // 滚动节流时间(ms)
-        };
+        // ==================== 辅助函数 ====================
+        function getColorFromName(name) {
+            const colors = [
+                '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
+                '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2',
+                '#F8C471', '#82E0AA', '#F1948A', '#85C1E2', '#D7BDE2',
+                '#A3E4D7', '#F9E79F', '#AED6F1', '#F5B7B1', '#CCD1D1'
+            ];
+            let hash = 0;
+            for (let i = 0; i < name.length; i++) {
+                hash = ((hash << 5) - hash) + name.charCodeAt(i);
+                hash = hash & hash;
+            }
+            const index = Math.abs(hash) % colors.length;
+            return colors[index];
+        }
 
-        // ==================== 数据定义 ====================
+        // ==================== 数据 ====================
         const aiCompanies = [
-            // 对话产品类
-            { id: 101, name: 'DeepSeek', logo: 'https://chat.deepseek.com/favicon.ico', url: 'https://chat.deepseek.com', desc: '深度求索出品，免费AI对话助手，支持超长上下文和联网搜索。', tags: ['chat', 'featured'], category: 'chat', founded: '2023', city: '杭州' },
-            { id: 102, name: '通义千问', logo: 'https://qianwen.aliyun.com/favicon.ico', url: 'https://tongyi.aliyun.com', desc: '阿里云推出的AI大模型，支持多轮对话和文档处理。', tags: ['chat', 'featured'], category: 'chat', founded: '2023', city: '杭州' },
+            // 对话产品类 - 只更新DeepSeek、通义千问、文心一言，其他保留原样
+            { id: 101, name: 'DeepSeek', logo: 'https://cdn.deepseek.com/logo.png', url: 'https://chat.deepseek.com', desc: '深度求索出品，免费AI对话助手，支持超长上下文和联网搜索。', tags: ['chat', 'featured'], category: 'chat', founded: '2023', city: '杭州' },
+            { id: 102, name: '通义千问', logo: 'https://img.alicdn.com/imgextra/i3/O1CN01H3RqFg1eN0b1x1D1N_!!6000000003862-2-tps-200-200.png', url: 'https://tongyi.aliyun.com', desc: '阿里云推出的AI大模型，支持多轮对话和文档处理。', tags: ['chat', 'featured'], category: 'chat', founded: '2023', city: '杭州' },
             { id: 103, name: '元宝', logo: 'https://yuanbao.tencent.com/favicon.ico', url: 'https://yuanbao.tencent.com', desc: '腾讯元宝AI助手，集成腾讯生态。', tags: ['chat'], category: 'chat', founded: '2023', city: '深圳' },
-            { id: 104, name: '文心一言', logo: 'https://yiyan.baidu.com/favicon.ico', url: 'https://yiyan.baidu.com', desc: '百度知识增强大语言模型，月活用户突破2亿。', tags: ['chat', 'featured'], category: 'chat', founded: '2023', city: '北京' },
+            { id: 104, name: '文心一言', logo: 'https://nlp-eb.cdn.bcebos.com/logo/favicon.ico', url: 'https://yiyan.baidu.com', desc: '百度知识增强大语言模型，月活用户突破2亿。', tags: ['chat', 'featured'], category: 'chat', founded: '2023', city: '北京' },
             { id: 105, name: '智谱清言', logo: 'https://chatglm.cn/favicon.ico', url: 'https://chatglm.cn', desc: '智谱AI基于GLM模型的对话助手。', tags: ['chat'], category: 'chat', founded: '2022', city: '北京' },
             { id: 106, name: 'Kimi', logo: 'https://kimi.moonshot.cn/favicon.ico', url: 'https://kimi.moonshot.cn', desc: '月之暗面出品，超长文本处理能力。', tags: ['chat', 'featured'], category: 'chat', founded: '2023', city: '北京' },
             { id: 107, name: '豆包', logo: 'https://www.doubao.com/favicon.ico', url: 'https://www.doubao.com', desc: '字节跳动AI对话助手，日活跃用户突破1亿。', tags: ['chat'], category: 'chat', founded: '2023', city: '北京' },
@@ -548,7 +572,6 @@
                 favorites.push(id);
             }
             saveFavorites();
-            // 只更新收藏按钮状态，不重新渲染整个页面
             document.querySelectorAll(`.favorite-btn[data-id="${id}"]`).forEach(btn => {
                 btn.classList.toggle('active');
                 const icon = btn.querySelector('i');
@@ -587,7 +610,6 @@
         }
 
         function renderCategories() {
-            // 使用requestAnimationFrame优化渲染
             if (renderTimeout) cancelAnimationFrame(renderTimeout);
             renderTimeout = requestAnimationFrame(() => {
                 const filteredCompanies = aiCompanies.filter(company => {
@@ -614,7 +636,6 @@
                     return;
                 }
 
-                // 使用文档片段优化DOM插入
                 const fragment = document.createDocumentFragment();
                 
                 if (currentFilter === 'all') {
@@ -639,13 +660,11 @@
         function renderCategoryElement(category, companies) {
             const section = document.createElement('div');
             
-            // 分类标题
             const title = document.createElement('div');
             title.className = 'category-sticky';
             title.innerHTML = `<i class="fas ${category.icon}"></i> ${category.name} (${companies.length})`;
             section.appendChild(title);
 
-            // 卡片网格
             const grid = document.createElement('div');
             grid.className = 'card-grid';
             
@@ -663,15 +682,26 @@
             card.dataset.url = company.url;
             
             const favorited = isFavorite(company.id);
-            const placeholder = `https://via.placeholder.com/50/667eea/ffffff?text=${company.name.charAt(0)}`;
+            const bgColor = getColorFromName(company.name);
+            
+            let iconHtml;
+            
+            if (company.logo) {
+                // 有logo的公司：尝试加载logo，失败时显示彩色首字母
+                iconHtml = `<img class="card-icon" 
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 50 50'%3E%3Crect width='50' height='50' fill='%23${bgColor.slice(1)}'/%3E%3Ctext x='25' y='32' font-size='24' text-anchor='middle' fill='%23ffffff' font-family='Arial'%3E${company.name.charAt(0)}%3C/text%3E%3C/svg%3E"
+                    data-src="${company.logo}"
+                    alt="${company.name}"
+                    loading="lazy"
+                    onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'50\' height=\'50\' viewBox=\'0 0 50 50\'%3E%3Crect width=\'50\' height=\'50\' fill=\'%23${bgColor.slice(1)}\'/%3E%3Ctext x=\'25\' y=\'32\' font-size=\'24\' text-anchor=\'middle\' fill=\'%23ffffff\' font-family=\'Arial\'%3E${company.name.charAt(0)}%3C/text%3E%3C/svg%3E';">`;
+            } else {
+                // 没有logo的公司：直接显示彩色首字母
+                iconHtml = `<div class="card-icon-placeholder" style="background-color: ${bgColor};">${company.name.charAt(0)}</div>`;
+            }
             
             card.innerHTML = `
                 <div class="card-header">
-                    ${company.logo ? 
-                        `<img class="card-icon" src="${placeholder}" data-src="${company.logo}" alt="${company.name}" 
-                            loading="lazy" decoding="async">` : 
-                        `<div class="card-icon-placeholder">${company.name.charAt(0)}</div>`
-                    }
+                    ${iconHtml}
                     <div class="card-title">${company.name}</div>
                 </div>
                 <div class="card-meta">
@@ -705,7 +735,7 @@
 
             // 懒加载图片
             const img = card.querySelector('img');
-            if (img) {
+            if (img && img.dataset.src) {
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
@@ -729,7 +759,6 @@
             renderCategories();
         }
 
-        // 筛选按钮事件
         filterButtonsContainer.addEventListener('click', (e) => {
             const btn = e.target.closest('.filter-btn');
             if (!btn) return;
@@ -737,12 +766,10 @@
             currentFilter = btn.dataset.filter;
             renderFilterButtons();
             renderCategories();
-            
-            // 滚动到顶部
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // 搜索防抖
+        let searchTimeout;
         searchInput.addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
@@ -751,7 +778,6 @@
             }, 300);
         });
 
-        // 收藏按钮事件（事件委托）
         categoriesContainer.addEventListener('click', (e) => {
             const btn = e.target.closest('.favorite-btn');
             if (btn) {
@@ -761,7 +787,6 @@
             }
         });
 
-        // 卡片点击事件
         categoriesContainer.addEventListener('click', (e) => {
             const card = e.target.closest('.card');
             if (!card || e.target.closest('.favorite-btn')) return;
@@ -775,7 +800,6 @@
             resetAllFilters();
         });
 
-        // 滚动优化 - 使用节流
         window.addEventListener('scroll', throttle(() => {
             if (window.scrollY > 300) {
                 backToTop.classList.add('show');
@@ -791,12 +815,6 @@
         // 初始化
         renderFilterButtons();
         renderCategories();
-
-        // 预加载字体图标
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'https://use.fontawesome.com/releases/v6.0.0-beta3/css/all.css';
-        document.head.appendChild(link);
     </script>
 </body>
 </html>
