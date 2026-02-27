@@ -15,17 +15,6 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0-beta3/css/all.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
-    <!-- 百度自动推送 -->
-    <script>
-        (function(){
-            var bp = document.createElement('script');
-            var curProtocol = window.location.protocol.split(':')[0];
-            bp.src = curProtocol === 'https' ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(bp, s);
-        })();
-    </script>
-    
     <style>
         * {
             margin: 0;
@@ -351,7 +340,156 @@
             text-decoration: none;
         }
 
-        /* ========== 访客统计 - 样式1：简约卡片 ========== */
+        /* ========== 留言表单样式 ========== */
+        .contact-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            margin: 40px auto;
+            max-width: 700px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .contact-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .contact-title h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .contact-title p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: #444;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-group label i {
+            color: #667eea;
+            width: 18px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            background: #fafafa;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn i {
+            font-size: 1.2rem;
+        }
+
+        .form-note {
+            text-align: center;
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .form-note i {
+            color: #4CAF50;
+        }
+
+        .success-message {
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========== 访客统计 ========== */
         .visitor-stats {
             margin-top: 15px;
             display: flex;
@@ -391,11 +529,6 @@
             align-items: center;
         }
 
-        .visitor-number img {
-            display: inline-block;
-            vertical-align: middle;
-        }
-
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.8rem;
@@ -406,6 +539,17 @@
             }
             .card-grid {
                 grid-template-columns: 1fr;
+            }
+            .contact-section {
+                padding: 30px 20px;
+                margin: 30px 15px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .contact-title h2 {
+                font-size: 1.6rem;
             }
             .visitor-card {
                 padding: 4px 16px;
@@ -434,6 +578,79 @@
 
         <div id="categoriesContainer"></div>
 
+        <!-- ========== 留言表单区域 ========== -->
+        <div class="contact-section" id="contact">
+            <div class="contact-title">
+                <h2><i class="fas fa-comments" style="color: #667eea; margin-right: 10px;"></i>联系我们</h2>
+                <p>有任何建议或合作意向，欢迎留言</p>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle" style="margin-right: 8px;"></i>
+                留言提交成功！我们会尽快回复您。
+            </div>
+
+            <form 
+                class="contact-form" 
+                name="contact" 
+                method="POST" 
+                data-netlify="true"
+                data-netlify-honeypot="bot-field"
+                onsubmit="return handleSubmit(event)"
+            >
+                <!-- Netlify 表单必需字段 -->
+                <input type="hidden" name="form-name" value="contact" />
+                
+                <!-- 防机器人隐藏字段 -->
+                <p hidden>
+                    <label>不要填写这个：<input name="bot-field" /></label>
+                </p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> 姓名 *</label>
+                        <input type="text" name="name" required placeholder="请输入您的姓名" />
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-building"></i> 公司</label>
+                        <input type="text" name="company" placeholder="请输入公司名称（选填）" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> 邮箱 *</label>
+                        <input type="email" name="email" required placeholder="我们会通过邮箱回复您" />
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-phone"></i> 电话</label>
+                        <input type="tel" name="phone" placeholder="选填" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> 留言主题 *</label>
+                    <input type="text" name="subject" required placeholder="如：商务合作、信息纠错、建议反馈" />
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-comment-dots"></i> 留言内容 *</label>
+                    <textarea name="message" required placeholder="请详细描述您的需求或建议..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> 提交留言
+                </button>
+
+                <div class="form-note">
+                    <i class="fas fa-lock"></i>
+                    所有留言仅管理员可见，您的隐私将得到保护
+                </div>
+            </form>
+        </div>
+
         <div class="back-to-top" id="backToTop">
             <i class="fas fa-arrow-up"></i>
         </div>
@@ -441,7 +658,7 @@
         <div class="footer">
             <p>🏆 数据综合自公开资料 · <a href="#" id="resetFilters">显示全部</a> · 共80+家AI企业</p>
             
-            <!-- 访客统计 - 样式1：简约卡片，文字已改为"访客" -->
+            <!-- 访客统计 -->
             <div class="visitor-stats">
                 <div class="visitor-card">
                     <i class="fas fa-eye"></i>
@@ -470,6 +687,20 @@
             }
             const index = Math.abs(hash) % colors.length;
             return colors[index];
+        }
+
+        // ==================== 表单提交处理 ====================
+        function handleSubmit(event) {
+            // 显示提交成功消息
+            const successMsg = document.getElementById('successMessage');
+            successMsg.classList.add('show');
+            
+            // 3秒后自动隐藏
+            setTimeout(() => {
+                successMsg.classList.remove('show');
+            }, 3000);
+            
+            return true; // 继续正常提交表单
         }
 
         // ==================== 数据 ====================
@@ -854,6 +1085,9 @@
         // 初始化
         renderFilterButtons();
         renderCategories();
+
+        // 将 resetAllFilters 暴露给全局
+        window.resetAllFilters = resetAllFilters;
     </script>
 </body>
 </html>
